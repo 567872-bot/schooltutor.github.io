@@ -21,6 +21,29 @@
     </style>
 </head>
 <body>
-    <iframe src="https://schoolhelp-ochre.vercel.app/" title="Example Iframe"></iframe>
+    <!-- Host page -->
+    <iframe id="myFrame"
+            src="https://schoolhelp-ochre.vercel.app/"
+            title="Trusted widget"
+            width="600" height="400"
+            sandbox="allow-scripts allow-forms"
+            loading="lazy"
+            style="border:1px solid #ddd;">
+    </iframe>
+    
+    <script>
+      const iframe = document.getElementById('myFrame');
+      // Send a message to iframe (only to allowed origin)
+      iframe.addEventListener('load', () => {
+        iframe.contentWindow.postMessage({type: 'init'}, 'https://trusted.example.com');
+      });
+    
+      // Receive messages (validate origin)
+      window.addEventListener('message', (ev) => {
+        if (ev.origin !== 'https://trusted.example.com') return;
+        console.log('Message from iframe:', ev.data);
+      });
+    </script>
+
 </body>
 </html>
